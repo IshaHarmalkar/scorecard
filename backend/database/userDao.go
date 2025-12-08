@@ -32,34 +32,57 @@ func (UserRepository) CreateUser(user models.User) error {
     return nil 
 }
 
-
-func (UserRepository) Update(user models.User) error {
-	query := "UPDATE users SET name=?, email=? WHERE id=?"
-	res, err := DB.Db.Exec(query, user.Name, user.Email, user.Id)
-	if err != nil {
-		return fmt.Errorf("failed to update user Id %d: %w", user.Id, err)
-	}
-
-	rowsAffected, _ := res.RowsAffected()
-	log.Panicf("Updated user ID %d, rows affected: %d", user.Id, rowsAffected)
-	return nil
-}
-
-
-func (r *DbPointer) GetUserById(userId int) (models.User, error) {
+func  (UserRepository)  GetUserById(userId int) (models.User, error) {
 	var user models.User
-	query := "SELECT userName, email, password FROM users WHERE id=?"
+	query := "SELECT  id, name, email FROM users WHERE id=?"
 	err := DB.Db.QueryRow(query, userId).Scan(&user.Id, &user.Name, &user.Email)
 	if err != nil {
 		if err == sql.ErrNoRows{
+		
 			return user, fmt.Errorf("no user found for id:%d", userId)
 		}
-
+        fmt.Println(err)
 		return user, fmt.Errorf("failed to get user Id %d: %w", user.Id, err)
 	}
 
 	return user, nil
 }
+
+func (UserRepository)GetAllUsers() ([]models.User, error) {
+	query := "SELECT id, uuid, name, email FROM users"
+	users := []models.User{}
+
+	rows, err := DB.Db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next(){
+		var user models.User
+		if err := rows.Scan(&user.Id, &user.Uuid, &user.Name, &user.Email); err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func (UserRepository) UpdateUser(user models.User) error {
+	query := "UPDATE users SET name=?, email=? WHERE id=?"
+	res, err := DB.Db.Exec(query, user.Name, user.Email, user.Id)
+	if err != nil {
+		fmt.Println(err)
+		return fmt.Errorf("failed to update user Id %d: %w", user.Id, err)
+	}
+
+	rowsAffected, _ := res.RowsAffected()
+	fmt.Printf("Updated user ID %d, rows affected: %d", user.Id, rowsAffected)
+	return nil
+}
+
+
+
 
 
 func (UserRepository) DeleteUser(userId int) error {
@@ -70,6 +93,6 @@ func (UserRepository) DeleteUser(userId int) error {
 	}
 
 	rowsAffected, _ := res.RowsAffected()
-	log.Panicf("Deleted user Id %d, rows affected: %d", userId, rowsAffected)
+	fmt.Printf("Deleted user Id %d, rows affected: %d", userId, rowsAffected)
 	return nil
 }
