@@ -1,7 +1,19 @@
 package services
 
-import "github.com/gin-gonic/gin"
+import (
+	"errors"
+	"scorecard/database"
+	"scorecard/models"
+)
 
-func CreateUser(c *gin.Context) {
+type UserService struct {
+	Repo database.UserRepository
+}
 
+func (s UserService) CreateUser(user models.User) error {
+	if user.Email == "" || user.Name == "" {
+		return errors.New("name and email required")
+	}
+
+	return  s.Repo.CreateUser(user)
 }

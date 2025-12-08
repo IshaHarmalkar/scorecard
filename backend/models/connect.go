@@ -23,38 +23,29 @@ func Dsn(dbName string) string {
 
 }
 
-func Connect(){
+func Connect()(*sql.DB, error){
 	db, err := sql.Open("mysql", Dsn(""))
 	if err != nil {
-		log.Panicf("Error %s when opening DB\n", err)
-		return
+		return nil, fmt.Errorf("error opening DB: %w", err)
 
 	}
 
 	ctx, cancelfunc := context.WithTimeout(context.Background(), 5 *time.Second)
 	defer cancelfunc()
-	res, err := db.ExecContext(ctx, "CREATE DATABASE IF NOT EXISTS " + dbname)
+	_, err = db.ExecContext(ctx, "CREATE DATABASE IF NOT EXISTS " + dbname)
 	if err != nil {
-		log.Panicf("Error %s when creating DB\n", err)
-		return
-	}
-
-	no, err := res.RowsAffected()
-	if err != nil {
-		log.Panicf("Error %s when fetching rows", err)
-		return
 		
+		return nil, fmt.Errorf("error creating DB: %w", err)
 	}
-
-	log.Printf("rows affected: %d\n", no)
 	db.Close()
+
+	
 
 	db, err = sql.Open("mysql", Dsn(dbname))
 	if err != nil {
-		log.Panicf("Error %s when opening DB", err)
-		return
+		return nil, fmt.Errorf("error opening DB: %w", err)
 	}
-	defer db.Close()
+
 
 	db.SetMaxOpenConns(20)
 	db.SetConnMaxIdleTime(20)
@@ -65,9 +56,10 @@ func Connect(){
 	defer cancelfunc()
 	err = db.PingContext(ctx)
 	if err != nil {
-		log.Printf("Errors %s pining DB", err)
-		return
+		db.Close()
+		return nil, fmt.Errorf("error pinging DB: %w", err)
 	}
 
-	log.Printf("Connected to DB %s successfully\n", dbname)
+	log.Printf("Connected to DB %s successfully", dbname)
+	return db, nil
 }
