@@ -27,15 +27,15 @@ func (s ScorecardService) GetScorecard(id int) (models.Scorecard, error){
 	return s.Repo.GetScorecardById(id)
 }
 
-func (s ScorecardService) GetAllScorecards() ([]models.User, error){
-	return s.Repo.GetAllForms()
+func (s ScorecardService) GetAllScorecards() ([]models.Scorecard, error){
+	return s.Repo.GetAllScorecards()
 }
 
 
-func (s ScorecardService) UpdateScorecard(user models.User) ( error){
-	return s.Repo.UpdateForm(user)
+func (s ScorecardService) UpdateScorecard(scorecard models.Scorecard) ( error){
+	return s.Repo.UpdateScorecard(scorecard)
 }
 
 func (s ScorecardService)DeleteScorecard(id int) error {
-	return s.Repo.DeleteForm(id)
+	return s.Repo.DeleteScorecard(id)
 }

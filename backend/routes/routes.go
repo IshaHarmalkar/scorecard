@@ -19,14 +19,12 @@ func SetRoutes(r *gin.Engine) {
 		api.GET("/users", controllers.GetAllUsers)
 		api.PUT("/users/:id", controllers.UpdateUser)
 		api.DELETE("/users/:id", controllers.DeleteUser)
-
-
 		
-		api.POST("/scorecard", controllers.CreateScorecard)
-		api.GET("/scorecard/:id", controllers.GetScorecard)
-		api.GET("/scorecard", controllers.GetAllScorecards)
-		api.PUT("/scorecard/:id", controllers.UpdateScorecard)
-		api.DELETE("/scorecard/:id", controllers.DeleteScorecard)
+		api.POST("/scorecards", controllers.CreateScorecard)
+		api.GET("/scorecards/:id", controllers.GetScorecard)
+		api.GET("/scorecards", controllers.GetAllScorecards)
+		api.PUT("/scorecards/:id", controllers.UpdateScorecard)
+		api.DELETE("/scorecards/:id", controllers.DeleteScorecard)
 	
 	}
 }

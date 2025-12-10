@@ -48,9 +48,9 @@ func  (ScorecardRepository)  GetScorecardById(scorecardId int) (models.Scorecard
 	return scorecard, nil
 }
 
-func (ScorecardRepository)GetAllForms() ([]models.User, error) {
-	query := "SELECT id, uuid, name, email FROM users"
-	users := []models.User{}
+func (ScorecardRepository)GetAllScorecards() ([]models.Scorecard, error) {
+	query := "SELECT  id, user_id, title, url, total_score, created_at, updated_at FROM scorecards"
+	scorecards := []models.Scorecard{}
 
 	rows, err := DB.Db.Query(query)
 	if err != nil {
@@ -58,26 +58,26 @@ func (ScorecardRepository)GetAllForms() ([]models.User, error) {
 	}
 
 	for rows.Next(){
-		var user models.User
-		if err := rows.Scan(&user.Id, &user.Uuid, &user.Name, &user.Email); err != nil {
+		var scorecard models.Scorecard
+		if err := rows.Scan(&scorecard.Id, &scorecard.UserId, &scorecard.Title, &scorecard.Url, &scorecard.TotalScore, &scorecard.CreatedAt, &scorecard.UpdatedAt); err != nil {
 			return nil, err
 		}
-		users = append(users, user)
+		scorecards = append(scorecards, scorecard)
 	}
 
-	return users, nil
+	return scorecards, nil
 }
 
-func (ScorecardRepository) UpdateForm(user models.User) error {
-	query := "UPDATE users SET name=?, email=? WHERE id=?"
-	res, err := DB.Db.Exec(query, user.Name, user.Email, user.Id)
+func (ScorecardRepository) UpdateScorecard(scorecard models.Scorecard) error {
+	query := "UPDATE scorecardss SET title=?, total_score=? WHERE id=?"
+	res, err := DB.Db.Exec(query, scorecard.Title, scorecard.TotalScore)
 	if err != nil {
 		fmt.Println(err)
-		return fmt.Errorf("failed to update user Id %d: %w", user.Id, err)
+		return fmt.Errorf("failed to update user Id %d: %w", scorecard.Id, err)
 	}
 
 	rowsAffected, _ := res.RowsAffected()
-	fmt.Printf("Updated user ID %d, rows affected: %d", user.Id, rowsAffected)
+	fmt.Printf("Updated user ID %d, rows affected: %d", scorecard.Id, rowsAffected)
 	return nil
 }
 
@@ -85,14 +85,14 @@ func (ScorecardRepository) UpdateForm(user models.User) error {
 
 
 
-func (ScorecardRepository) DeleteForm(userId int) error {
-	query := "DELETE FROM users WHERE id=?"
-	res, err := DB.Db.Exec(query, userId)
+func (ScorecardRepository) DeleteScorecard(scorecardId int) error {
+	query := "DELETE FROM scorecards WHERE id=?"
+	res, err := DB.Db.Exec(query, scorecardId)
 	if err != nil {
-		return fmt.Errorf("failed to delete user Id %d: %w", userId, err)
+		return fmt.Errorf("failed to delete scorecard with  Id %d: %w", scorecardId, err)
 	}
 
 	rowsAffected, _ := res.RowsAffected()
-	fmt.Printf("Deleted user Id %d, rows affected: %d", userId, rowsAffected)
+	fmt.Printf("Deleted user Id %d, rows affected: %d", scorecardId, rowsAffected)
 	return nil
 }

@@ -50,19 +50,19 @@ func GetScorecard(c *gin.Context) {
 }
 
 func GetAllScorecards(c *gin.Context){
-	users, err := userService.GetAllUsers()
+	scorecards, err := scorecardService.GetAllScorecards()
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error":"Could not fetch users"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error":"Could not fetch scorecards"})
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	c.JSON(http.StatusOK, scorecards)
 }
 
 func UpdateScorecard(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
-	var input models.User
+	var input models.Scorecard
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error":"id must be an integer"})
@@ -76,8 +76,8 @@ func UpdateScorecard(c *gin.Context) {
 	}
 
 
-	if err =  userService.UpdateUser(input); err != nil{
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update user"})
+	if err =  scorecardService.UpdateScorecard(input); err != nil{
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update scorecard"})
 		return
 	}
 
@@ -95,11 +95,11 @@ func DeleteScorecard(c *gin.Context){
 		return
 	}
 
-	if err := userService.DeleteUser(id); err != nil{
+	if err := scorecardService.DeleteScorecard(id); err != nil{
 		c.JSON(http.StatusInternalServerError, gin.H{"error":"Failed to delete"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message":"User deleted"})
+	c.JSON(http.StatusOK, gin.H{"message":"Scorecard deleted"})
 	
 }
