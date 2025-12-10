@@ -13,19 +13,19 @@ var scorecardService = services.ScorecardService{}
 
 func CreateScorecard(c *gin.Context) {
 
-	var input models.User
+	var input models.Scorecard
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := userService.CreateUser(input); err != nil {
+	if err := scorecardService.CreateScorecard(input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User created"})
+	c.JSON(http.StatusCreated, gin.H{"message": "Scorecard created"})
 
 }
 

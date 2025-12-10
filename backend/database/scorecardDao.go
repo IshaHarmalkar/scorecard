@@ -13,13 +13,13 @@ type ScorecardRepository struct {}
 
 
 
-func (ScorecardRepository) CreateForm(user models.User) error {
-	query := "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"
+func (ScorecardRepository) CreateScorecard(scorecard models.Scorecard) error {
+	query := "INSERT INTO scorecards (user_id, title, url, total_score) VALUES (?, ?, ?, ?)"
 
 	//execute query
-	res, err := DB.Db.Exec(query, user.Name, user.Email, user.Password)
+	res, err := DB.Db.Exec(query, scorecard.UserId, scorecard.Title, scorecard.Url, scorecard.TotalScore)
 	if err != nil {
-		return fmt.Errorf("failed to create user %s into database: %w", user.Name, err)
+		return fmt.Errorf("failed to create scorecard %s into database: %w", scorecard.Title, err)
 	}
 
 	lastId, err := res.LastInsertId()
@@ -27,8 +27,8 @@ func (ScorecardRepository) CreateForm(user models.User) error {
 		return fmt.Errorf("failed to fetch last insert id: %w", err)
 	}
 
-	fmt.Printf("User '%s' successfully created in in db with Id %d.\n", user.Name, lastId)
-	log.Printf("Inserted user with ID: %d", lastId)
+	fmt.Printf("Scorecard '%s' successfully created in in db with Id %d.\n", scorecard.Title, lastId)
+	log.Printf("Created scorecard with ID: %d", lastId)
     return nil 
 }
 

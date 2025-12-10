@@ -1,9 +1,9 @@
 package services
 
 import (
-	"errors"
 	"scorecard/database"
 	"scorecard/models"
+	"scorecard/utils"
 )
 
 type ScorecardService struct {
@@ -12,12 +12,17 @@ type ScorecardService struct {
 
 
 
-func (s ScorecardService) CreateForm(user models.User) error {
-	if user.Email == "" || user.Name == "" {
-		return errors.New("name and email required")
-	}
+func (s ScorecardService) CreateScorecard(scorecard models.Scorecard) error {
 
-	return  s.Repo.CreateForm(user)
+	//generate slug for scorecard
+	slug, err := utils.GenerateSlug(scorecard.Title)
+	if err != nil{
+		return err
+	}
+	scorecard.Url = slug
+	
+
+	return  s.Repo.CreateScorecard(scorecard)
 }
 
 func (s ScorecardService) GetForm(id int) (models.User, error){
