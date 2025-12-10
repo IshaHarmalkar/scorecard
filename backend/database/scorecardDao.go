@@ -7,10 +7,13 @@ import (
 	"scorecard/models"
 )
 
-type UserRepository struct {}
+type ScorecardRepository struct {}
 
 
-func (UserRepository) CreateUser(user models.User) error {
+
+
+
+func (ScorecardRepository) CreateForm(user models.User) error {
 	query := "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"
 
 	//execute query
@@ -29,7 +32,7 @@ func (UserRepository) CreateUser(user models.User) error {
     return nil 
 }
 
-func  (UserRepository)  GetUserById(userId int) (models.User, error) {
+func  (ScorecardRepository)  GetFormById(userId int) (models.User, error) {
 	var user models.User
 	query := "SELECT  id, name, email FROM users WHERE id=?"
 	err := DB.Db.QueryRow(query, userId).Scan(&user.Id, &user.Name, &user.Email)
@@ -45,7 +48,7 @@ func  (UserRepository)  GetUserById(userId int) (models.User, error) {
 	return user, nil
 }
 
-func (UserRepository)GetAllUsers() ([]models.User, error) {
+func (ScorecardRepository)GetAllForms() ([]models.User, error) {
 	query := "SELECT id, uuid, name, email FROM users"
 	users := []models.User{}
 
@@ -65,7 +68,7 @@ func (UserRepository)GetAllUsers() ([]models.User, error) {
 	return users, nil
 }
 
-func (UserRepository) UpdateUser(user models.User) error {
+func (ScorecardRepository) UpdateForm(user models.User) error {
 	query := "UPDATE users SET name=?, email=? WHERE id=?"
 	res, err := DB.Db.Exec(query, user.Name, user.Email, user.Id)
 	if err != nil {
@@ -82,7 +85,7 @@ func (UserRepository) UpdateUser(user models.User) error {
 
 
 
-func (UserRepository) DeleteUser(userId int) error {
+func (ScorecardRepository) DeleteForm(userId int) error {
 	query := "DELETE FROM users WHERE id=?"
 	res, err := DB.Db.Exec(query, userId)
 	if err != nil {
