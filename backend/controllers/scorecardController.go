@@ -36,17 +36,16 @@ func GetScorecard(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error":"id must be an integer"})
 		return
-
 	}
 	
 
-	user, err := userService.GetUser(id)
+	scorecard, err := scorecardService.GetScorecard(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Scorecard not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, scorecard)
 
 }
 

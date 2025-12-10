@@ -32,20 +32,20 @@ func (ScorecardRepository) CreateScorecard(scorecard models.Scorecard) error {
     return nil 
 }
 
-func  (ScorecardRepository)  GetFormById(userId int) (models.User, error) {
-	var user models.User
-	query := "SELECT  id, name, email FROM users WHERE id=?"
-	err := DB.Db.QueryRow(query, userId).Scan(&user.Id, &user.Name, &user.Email)
+func  (ScorecardRepository)  GetScorecardById(scorecardId int) (models.Scorecard, error) {
+	var scorecard  models.Scorecard
+	query := "SELECT  id, user_id, title, url, total_score, created_at, updated_at FROM scorecards WHERE id=?"
+	err := DB.Db.QueryRow(query, scorecardId).Scan(&scorecard.Id, &scorecard.UserId, &scorecard.Title, &scorecard.Url, &scorecard.TotalScore, &scorecard.CreatedAt, &scorecard.UpdatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows{
 		
-			return user, fmt.Errorf("no user found for id:%d", userId)
+			return scorecard, fmt.Errorf("no scorecard found for id:%d", scorecardId)
 		}
         fmt.Println(err)
-		return user, fmt.Errorf("failed to get user Id %d: %w", user.Id, err)
+		return scorecard, fmt.Errorf("failed to get scorecard with  Id %d: %w", scorecard.Id, err)
 	}
 
-	return user, nil
+	return scorecard, nil
 }
 
 func (ScorecardRepository)GetAllForms() ([]models.User, error) {
