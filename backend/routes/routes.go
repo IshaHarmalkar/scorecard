@@ -21,10 +21,17 @@ func SetRoutes(r *gin.Engine) {
 		api.DELETE("/users/:id", controllers.DeleteUser)
 		
 		api.POST("/scorecards", controllers.CreateScorecard)
-		api.GET("/scorecards/:id", controllers.GetScorecard)
+		api.GET("/scorecards/:scorecardId", controllers.GetScorecard)
 		api.GET("/scorecards", controllers.GetAllScorecards)
-		api.PUT("/scorecards/:id", controllers.UpdateScorecard)
-		api.DELETE("/scorecards/:id", controllers.DeleteScorecard)
+		api.PUT("/scorecards/:scorecardId", controllers.UpdateScorecard)
+		api.DELETE("/scorecards/:scorecardId", controllers.DeleteScorecard)
+
+			
+		api.POST("/sections", controllers.CreateSection)
+		api.GET("/scorecards/:scorecardId/sections/:sectionId", controllers.GetSection)
+		api.GET("/sections", controllers.GetAllSections)
+		api.PUT("/sections/:id", controllers.UpdateSection)
+		api.DELETE("/sections/:id", controllers.DeleteSection)
 	
 	}
 }

@@ -32,7 +32,7 @@ func CreateScorecard(c *gin.Context) {
 
 func GetScorecard(c *gin.Context) {
 
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("scorecardId"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error":"id must be an integer"})
 		return
@@ -61,7 +61,7 @@ func GetAllScorecards(c *gin.Context){
 }
 
 func UpdateScorecard(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("scorecardId"))
 	var input models.Scorecard
 
 	if err != nil {
@@ -88,7 +88,7 @@ func UpdateScorecard(c *gin.Context) {
 
 
 func DeleteScorecard(c *gin.Context){
-	id, err := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("scorecardId"))
 	
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error":"id must be an integer"})

@@ -37,5 +37,6 @@ func (s ScorecardService) UpdateScorecard(scorecard models.Scorecard) ( error){
 }
 
 func (s ScorecardService)DeleteScorecard(id int) error {
+	
 	return s.Repo.DeleteScorecard(id)
 }
